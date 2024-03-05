@@ -22,10 +22,14 @@ type ZK13 struct {
 func NewZK13(secretBagage string, bits int) *ZK13 {
 	z := &ZK13{}
 	p, err := GenerateLargePrime(bits)
+
 	if err != nil {
 		panic(fmt.Sprintf("Failed to generate a large prime: %v", err))
 	}
 	g := big.NewInt(GENERATOR)
+	if !validatePrime(p, g) {
+		NewZK13(secretBagage, bits)
+	}
 	hash := blake3.Sum512([]byte(secretBagage))
 	Hs := new(big.Int).SetBytes(hash[:])
 	z.p = p
@@ -44,7 +48,7 @@ func (z *ZK13) Prover() (*big.Int, *big.Int) {
 
 // Verifier checks if the provided proof (r, P) is valid  Verifier checks the proof using constant-time comparison
 func (z *ZK13) Verifier(r, P *big.Int) bool {
-	
+
 	V := new(big.Int).Exp(r, z.Hs, z.p)
 	// Convert V and P to byte slices for comparison
 	VBytes := V.Bytes()
