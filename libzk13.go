@@ -9,7 +9,6 @@ import (
 	"github.com/zeebo/blake3"
 )
 
-const PrimeLength = 2048 // Ensure this is suitable for your security needs
 const GENERATOR = 7
 const PubKeyRange = 2044 // Size of k, ensure the range is suitable
 
@@ -19,7 +18,7 @@ type ZK13 struct {
 
 // NewZK13 initializes the ZK13 structure with a prime number, generator, and hashed secret.
 // It addresses the correct handling of byte slices and ensures that parameters are securely generated.
-func NewZK13(secretBagage string, bits int) *ZK13 {
+func NewZK13(secretBaggage string, bits int) *ZK13 {
 	var p *big.Int
 	var err error
 	z := &ZK13{}
@@ -36,7 +35,7 @@ func NewZK13(secretBagage string, bits int) *ZK13 {
 		p, err = GenerateLargePrime(bits)
 		z.p = p
 	}
-	hash := blake3.Sum512([]byte(secretBagage))
+	hash := blake3.Sum512([]byte(secretBaggage))
 	Hs := new(big.Int).SetBytes(hash[:])
 
 	z.Hs = Hs
@@ -102,7 +101,7 @@ func randBigInt(max *big.Int) (*big.Int, error) {
 	return n, nil
 }
 
-// setupZK13Verifier simulates the verifier setup for demonstration purposes.
+// SetupZK13Verifier simulates the verifier setup for demonstration purposes.
 // In practice, the verifier should only need to verify the proof against known parameters, not generate them.
 func SetupZK13Verifier(z *ZK13) *Verifier {
 	v := &Verifier{}
