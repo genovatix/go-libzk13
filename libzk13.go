@@ -9,8 +9,8 @@ import (
 	"github.com/zeebo/blake3"
 )
 
-const PrimeLength = 4055 // Ensure this is suitable for your security needs
-const GENERATOR = 777
+const PrimeLength = 2048 // Ensure this is suitable for your security needs
+const GENERATOR = 7
 const PubKeyRange = 2044 // Size of k, ensure the range is suitable
 
 type ZK13 struct {
@@ -20,20 +20,25 @@ type ZK13 struct {
 // NewZK13 initializes the ZK13 structure with a prime number, generator, and hashed secret.
 // It addresses the correct handling of byte slices and ensures that parameters are securely generated.
 func NewZK13(secretBagage string, bits int) *ZK13 {
+	var p *big.Int
+	var err error
 	z := &ZK13{}
-	p, err := GenerateLargePrime(bits)
+	p, err = GenerateLargePrime(bits)
 
 	if err != nil {
 		panic(fmt.Sprintf("Failed to generate a large prime: %v", err))
 	}
 	g := big.NewInt(GENERATOR)
-	if !validatePrime(p, g) {
-		NewZK13(secretBagage, bits)
+	z.g = g
+	z.p = p
+	if !z.ValidateParameters(big.NewInt(224)) {
+		z.p = nil
+		p, err = GenerateLargePrime(bits)
+		z.p = p
 	}
 	hash := blake3.Sum512([]byte(secretBagage))
 	Hs := new(big.Int).SetBytes(hash[:])
-	z.p = p
-	z.g = g
+
 	z.Hs = Hs
 	return z
 }
