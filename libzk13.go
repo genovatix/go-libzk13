@@ -2,6 +2,7 @@ package main
 
 import (
 	"crypto/rand"
+	"crypto/subtle"
 	"fmt"
 	"math/big"
 
@@ -41,10 +42,16 @@ func (z *ZK13) Prover() (*big.Int, *big.Int) {
 	return r, P
 }
 
-// Verifier checks if the provided proof (r, P) is valid
+// Verifier checks if the provided proof (r, P) is valid  Verifier checks the proof using constant-time comparison
 func (z *ZK13) Verifier(r, P *big.Int) bool {
-	V := new(big.Int).Exp(r, z.Hs, z.p) // V = r^Hs mod p
-	return V.Cmp(P) == 0
+	
+	V := new(big.Int).Exp(r, z.Hs, z.p)
+	// Convert V and P to byte slices for comparison
+	VBytes := V.Bytes()
+	PBytes := P.Bytes()
+
+	// Use subtle.ConstantTimeCompare to prevent timing attacks
+	return subtle.ConstantTimeCompare(VBytes, PBytes) == 1
 }
 
 func GenerateLargePrime(bit int) (*big.Int, error) {
