@@ -1,6 +1,4 @@
-Certainly! Below is your `README.md` content in Markdown format, ready to be added to your GitHub project for the ZK13 protocol implementation in Go.
 
-```markdown
 # ZK13 Protocol Implementation in Go
 
 This repository contains an implementation of the ZK13 protocol, a cryptographic scheme for zero-knowledge proofs, written in Go. The ZK13 protocol allows a prover (Bob) to demonstrate knowledge of a secret to a verifier (Alice) without revealing the secret itself. This implementation emphasizes variable prime lengths for security and performance testing.
@@ -27,8 +25,8 @@ go version
 Clone the repository to your local machine:
 
 ```bash
-git clone https://github.com/genovatix/zk13
-cd zk13
+git clone https://github.com/twingdev/go-libzk13
+cd go-libzk13
 ```
 
 ### Running the Program
@@ -71,5 +69,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - Thanks to the cryptographic community for the continuous development and research in the field of zero-knowledge proofs.
 - This project utilizes the [Blake3 hashing algorithm](https://github.com/zeebo/blake3) for cryptographic hashing.
-```
+
 
