@@ -1,5 +1,4 @@
 
-
 ZK13: A Zero-Knowledge Proof Protocol for Set Membership
 =======================================================
 
@@ -31,6 +30,40 @@ The implementation provides a simple API for generating and verifying zero-knowl
 * `Prover(nonce *big.Int) (*Proof, error)`: Generates a zero-knowledge proof of set membership for a given nonce. The nonce is used to protect against replay attacks.
 * `Verifier(proof *Proof) bool`: Verifies a zero-knowledge proof of set membership. Returns `true` if the proof is valid, and `false` otherwise.
 
+Usage
+-----
+
+Here's an example of how to use go-libzk13 to generate and verify a zero-knowledge proof of set membership:
+```go
+package main
+
+import (
+    "fmt"
+    "github.com/genovatix/go-libzk13/zkp"
+    "math/big"
+)
+
+func main() {
+    // Create a new ZK13 instance with a 2048-bit prime
+    zk13 := zkp.NewZK13("shared secret", 2048)
+
+    // Generate a nonce for replay attack protection
+    nonce, err := zkp.GenerateNonce(zk13.P())
+    if err != nil {
+        panic(err)
+    }
+
+    // Generate a zero-knowledge proof of set membership
+    proof, err := zk13.Prover(nonce)
+    if err != nil {
+        panic(err)
+    }
+
+    // Verify the zero-knowledge proof of set membership
+    isValid := zk13.Verifier(proof)
+    fmt.Printf("Proof is valid: %v\n", isValid)
+}
+```
 Performance
 -----------
 
