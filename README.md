@@ -1,4 +1,4 @@
-Sure, here's a draft of a README.md file that describes the ZK13 algorithm and its implementation in go-libzk13:
+
 
 ZK13: A Zero-Knowledge Proof Protocol for Set Membership
 =======================================================
