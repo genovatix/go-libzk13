@@ -11,6 +11,7 @@ import (
 )
 
 func main() {
+	runtime.GOMAXPROCS(7)
 	// Start a goroutine with an HTTP server for runtime profiling
 	go func() {
 		log.Println(http.ListenAndServe("localhost:6060", nil))
@@ -28,11 +29,15 @@ func main() {
 	defer pprof.StopCPUProfile()
 
 	// Test different prime lengths
-	for _, bits := range []int{512, 1024, 2048} {
+	for _, bits := range []int{512, 1024, 2048, 2048 + 32} {
 		fmt.Printf("Testing with prime length: %d bits\n", bits)
 		zk13 := NewZK13("shared secret", bits) // Adjust NewZK13 to accept prime length as an argument
-		r, P := zk13.Prover()
-		isValid := zk13.Verifier(r, P)
+		nonce := zk13.GenerateNonce()          // Generate a nonce for replay attack protection
+		proof, err := zk13.Prover(nonce)
+		if err != nil {
+			log.Fatalf("Error generating proof: %v", err)
+		}
+		isValid := zk13.Verifier(proof)
 		fmt.Printf("Verification with %d bits prime: %v\n", bits, isValid)
 	}
 
@@ -46,4 +51,5 @@ func main() {
 	if err := pprof.WriteHeapProfile(mf); err != nil {
 		log.Fatal("could not write memory profile: ", err)
 	}
+
 }
