@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/genovatix/go-libzk13/zkp"
+	"github.com/twingdev/go-libzk13/zkp"
 	"log"
 	"math/big"
 	"net/http"
