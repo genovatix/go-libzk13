@@ -3,7 +3,6 @@ package zkp
 import (
 	"crypto/rand"
 	"fmt"
-	"github.com/davecgh/go-spew/spew"
 	"github.com/zeebo/blake3"
 	"math/big"
 )
@@ -43,7 +42,6 @@ func NewZK13(secretBaggage string, bits int) *ZK13 {
 	hash := blake3.Sum512([]byte(secretBaggage))
 	Hs := new(big.Int).SetBytes(hash[:])
 	z.Hs = Hs
-	spew.Dump(z)
 	return z
 }
 
@@ -66,7 +64,6 @@ func (z *ZK13) Prover(nonce *big.Int) (*Proof, error) {
 		P:     P,
 		Nonce: nonce,
 	}
-	spew.Dump(proof)
 	return proof, nil
 }
 
